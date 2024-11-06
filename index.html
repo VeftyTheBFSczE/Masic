@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Coffee Tracker</title>
+  <script src="https://cdn.socket.io/4.0.0/socket.io.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/qrcode/build/qrcode.min.js"></script>
+  <style>
+    .highlight {
+      animation: highlight 1s ease-in-out;
+    }
+
+    @keyframes highlight {
+      from { background-color: yellow; }
+      to { background-color: transparent; }
+    }
+  </style>
+</head>
+<body>
+  <div>
+    <button onclick="setTab('log')">Log Coffee</button>
+    <button onclick="setTab('overview')">Overview</button>
+    <button onclick="setTab('tasks')">Tasks</button>
+
+    <div id="log" style="display: none;">
+      <button onclick="handleLogCoffee()">Log Coffee</button>
+      <div id="qrCode"></div>
+      <button onclick="handleGenerateQrCode()">Generate QR Code</button>
+    </div>
+
+    <div id="overview" style="display: none;">
+      <h2>Overview</h2>
+      <ul id="coffeeLog"></ul>
+    </div>
+
+    <div id="tasks" style="display: none;">
+      <h2>Tasks</h2>
+      <ul id="tasksList"></ul>
+    </div>
+  </div>
+
+  <script>
+    const socket = io('http://localhost:3000');
+    let coffeeLog = [];
+    let tasks = [];
+
+    socket.on('update', (data) => {
+      coffeeLog = data.coffeeLog;
+      tasks = data.tasks;
+      updateOverview();
+      updateTasks();
+    });
+
+    function setTab(tab) {
+      document.getElementById('log').style.display = tab === 'log' ? 'block' : 'none';
+      document.getElementById('overview').style.display = tab === 'overview' ? 'block' : 'none';
+      document.getElementById('tasks').style.display = tab === 'tasks' ? 'block' : 'none';
+    }
+
+    function handleLogCoffee() {
+      socket.emit('logCoffee', { user: 'User1', amount: 1 });
+    }
+
+    function handleGenerateQrCode() {
+      const qrCodeElement = document.getElementById('qrCode');
+      qrCodeElement.innerHTML = '';
+      QRCode.toCanvas(qrCodeElement, 'GeneratedQRCode', { width: 128 });
+    }
+
+    function updateOverview() {
+      const coffeeLogElement = document.getElementById('coffeeLog');
+      coffeeLogElement.innerHTML = '';
+      coffeeLog.forEach(log => {
+        const li = document.createElement('li');
+        li.textContent = `${log.user} drank ${log.amount} coffee(s)`;
+        li.classList.add('highlight');
+        coffeeLogElement.appendChild(li);
+      });
+    }
+
+    function updateTasks() {
+      const tasksListElement = document.getElementById('tasksList');
+      tasksListElement.innerHTML = '';
+      tasks.forEach(task => {
+        const li = document.createElement('li');
+        li.textContent = `${task.description} - ${task.status}`;
+        tasksListElement.appendChild(li);
+      });
+    }
+  </script>
+</body>
+</html>
