@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kávová aplikace</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+    <h1>Vytvořte QR kód pro registraci</h1>
+    <div>
+        <input id="qr_name" type="text" placeholder="Zadejte své jméno" required>
+        <button onclick="generateQR()">Generovat QR kód</button>
+        <div id="qr_code_container" style="display:none;">
+            <h3>QR kód pro registraci:</h3>
+            <img id="qr_code" style="max-width: 200px;">
+        </div>
+    </div>
+    
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
+</body>
+</html>

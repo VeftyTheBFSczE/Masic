@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Přehled objednávek</title>
+</head>
+<body>
+    <h1>Přehled objednávek kávy</h1>
+    
+    <!-- Formulář pro přidání objednávky kávy -->
+    <form method="POST">
+        <label for="amount">Kolik kávy jste uvařil/a?</label>
+        <input type="number" id="amount" name="amount" min="1" required>
+        <button type="submit">Odeslat</button>
+    </form>
+
+    <h2>Celkový přehled</h2>
+    <table border="1">
+        <tr>
+            <th>Uživatel</th>
+            <th>Počet kávy</th>
+        </tr>
+        {% for user, total_coffees in coffee_data %}
+        <tr>
+            <td>{{ user }}</td>
+            <td>{{ total_coffees }}</td>
+        </tr>
+        {% endfor %}
+    </table>
+
+    <br>
+    <a href="{{ url_for('logout') }}">Odhlásit se</a>
+</body>
+</html>

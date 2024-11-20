@@ -1,0 +1,17 @@
+body {
+    font-family: Arial, sans-serif;
+    margin: 20px;
+}
+h1 {
+    text-align: center;
+}
+input {
+    margin: 10px 0;
+}
+button {
+    padding: 5px 10px;
+    cursor: pointer;
+}
+#qr_code {
+    margin-top: 20px;
+}
